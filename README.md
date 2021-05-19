@@ -3,7 +3,7 @@
 1.Clone
 ```
 git clone https://github.com/zh0glikk/udp_echo_server.git
-cd udp_echo_client
+cd udp_echo_server
 ```
 
 2.Install
