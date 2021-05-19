@@ -6,7 +6,7 @@ git clone https://github.com/zh0glikk/udp_echo_server.git
 cd udp_echo_server
 ```
 
-2.Install
+2.Install & Run
 
 ```
 export KV_VIPER_FILE=./example.config.yaml
