@@ -12,7 +12,7 @@ import (
 	"udp_echo_server/internal/config"
 )
 
-const ShellToUse = "bash"
+const ShellToUse = "/bin/sh"
 
 type service struct {
 	logger           *logan.Entry
@@ -67,7 +67,7 @@ func (s *service) Run(ctx context.Context) error{
 
 			res = stdout + "\n" + stderr
 		} else {
-			res = strings.ToUpper(message)
+			res = strings.ToUpper(message) + "\n"
 		}
 
 		conn.WriteTo([]byte(res), addr)

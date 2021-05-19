@@ -6,4 +6,4 @@ log:
   disable_sentry: true
 
 listener:
-  port: 7778 # address on which service will work
+  port: 8285 # address on which service will work
